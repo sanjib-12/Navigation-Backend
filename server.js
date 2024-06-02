@@ -3,14 +3,20 @@ const mongoose =require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
 
+const authRoute = require('./Routes/authRoute');
+
 dotenv.config({path: './config.env'});//this should always come before any import.
 
 
 const app = express();
 
 //Middleware
-app.use(cors);
+app.use(cors());
 app.use(express.json());
+
+
+//route
+app.use('/api/auth', authRoute);
 
 //Mongoose DB Connection
 mongoose.connect(process.env.CONN_STR)
@@ -21,7 +27,16 @@ mongoose.connect(process.env.CONN_STR)
      console.log('error in connection.',error)
 })
 
+//Global Error Handler
+app.use((err,req, res, next) =>{
+    err.statusCode = err.statusCode || 500;
+    err.status = err.status || 'error';
 
+    res.status(err.statusCode).json({
+        status: err.status,
+        message: err.message,
+    });
+});
 
 
 const port = process.env.PORT || 3000;
