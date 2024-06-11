@@ -7,13 +7,11 @@ const authRoute = require('./Routes/authRoute');
 
 dotenv.config({path: './config.env'});//this should always come before any import.
 
-
 const app = express();
 
 //Middleware
 app.use(cors());
 app.use(express.json());
-
 
 //route
 app.use('/api/auth', authRoute);
