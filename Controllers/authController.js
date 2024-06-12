@@ -74,3 +74,36 @@ exports.login = async (req, res, next) =>{
         next(error);
     }
 }
+
+// password reset
+exports.resetPassword = async (req, res, next) => {
+    try {
+        console.log('Reset password request body:', req.body);
+
+        const { email, newPassword } = req.body;
+
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return next(new createError('User not found!', 404));
+        }
+
+        if (!newPassword) {
+            return next(new createError('New password is required!', 400));
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 12);
+
+        user.password = hashedPassword;
+        await user.save();
+
+        res.status(200).json({
+            status: 'success',
+            message: 'Password reset successfully',
+        });
+
+    } catch (error) {
+        console.error('Reset password error:', error);
+        next(error);
+    }
+};
