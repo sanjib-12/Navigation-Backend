@@ -4,6 +4,8 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 
 const authRoute = require('./Routes/authRoute');
+const historyRoute = require('./Routes/historyRoute');
+const modesRoute = require('./Routes/modesRoute');
 
 dotenv.config({path: './config.env'});//this should always come before any import.
 
@@ -15,6 +17,8 @@ app.use(express.json());
 
 //route
 app.use('/api/auth', authRoute);
+app.use('/api/history', historyRoute);
+//app.use('/api/modes', modesRoute)
 
 //Mongoose DB Connection
 mongoose.connect(process.env.CONN_STR)

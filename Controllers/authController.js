@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const User = require('../Models/userModel')
+const {User} = require('../Models/databaseModel')
 const createError = require('../Utils/appError')
 
 //User Registration
@@ -21,12 +21,12 @@ exports.signup = async (req, res, next) =>{
         });
 
         //assigning jwt to users
-        const token = jwt.sign({_id: newUser._id}, "secretKey123",{expiresIn: '90d'});
+        const token = jwt.sign({_id: newUser._id}, "secretKey123",{expiresIn: '1d'});
 
         res.status(201).json({
             status: 'success',
             message: 'User registered successfully',
-            token,
+            token: token,
             user:{
                 _id: newUser._id,
                 name: newUser.name,
@@ -56,7 +56,7 @@ exports.login = async (req, res, next) =>{
             return next(new createError('Invalid Password', 401));
         }
 
-        const token = jwt.sign({_id: user._id}, "secretKey123",{expiresIn: '90d'});
+        const token = jwt.sign({_id: user._id}, "secretKey123",{expiresIn: '1d'});
 
         res.status(200).json({
             status: 'success',
@@ -78,7 +78,7 @@ exports.login = async (req, res, next) =>{
 // password reset
 exports.resetPassword = async (req, res, next) => {
     try {
-        console.log('Reset password request body:', req.body);
+        console.log('Reset password request body:', req.body);  
 
         const { email, newPassword } = req.body;
 

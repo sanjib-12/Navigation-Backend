@@ -1,0 +1,10 @@
+// const express = require('express');
+
+// const {handleUber} = require('../Controllers/thirdPartyApi')
+
+// const router = express.Router();
+
+// router.post('/uber', handleUber);
+
+
+// module.exports = router;
